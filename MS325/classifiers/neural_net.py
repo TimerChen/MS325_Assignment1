@@ -76,8 +76,8 @@ class TwoLayerNet(object):
     # Store the result in the scores variable, which should be an array of      #
     # shape (N, C).                                                             #
     #############################################################################
-    h_output = 
-    scores = 
+    h_output = None
+    scores = None
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
@@ -94,9 +94,9 @@ class TwoLayerNet(object):
     # in the variable loss, which should be a scalar. Use the Softmax           #
     # classifier loss.                                                          #
     #############################################################################
-    shift_scores = 
-    softmax_output = 
-    loss = 
+    shift_scores = None
+    softmax_output = None
+    loss = None
     loss /= N
     loss +=  0.5* reg * (np.sum(W1 * W1) + np.sum(W2 * W2))
     #############################################################################
@@ -111,15 +111,15 @@ class TwoLayerNet(object):
     # grads['W1'] should store the gradient on W1, and be a matrix of same size #
     #############################################################################
     dscores = softmax_output.copy()
-    dscores[range(N), list(y)] -= 
+    dscores[range(N), list(y)] -= None
     dscores /= N
-    grads['W2'] = 
-    grads['b2'] = 
+    grads['W2'] = None
+    grads['b2'] = None
     
-    dh = 
-    dh_ReLu = 
-    grads['W1'] = 
-    grads['b1'] = 
+    dh = None
+    dh_ReLu = None
+    grads['W1'] = None
+    grads['b1'] = None
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
@@ -163,7 +163,7 @@ class TwoLayerNet(object):
       # TODO: Create a random minibatch of training data and labels, storing  #
       # them in X_batch and y_batch respectively.                             #
       #########################################################################
-      idx = 
+      idx = None
       X_batch = X[idx]
       y_batch = y[idx]
       #########################################################################
@@ -180,10 +180,10 @@ class TwoLayerNet(object):
       # using stochastic gradient descent. You'll need to use the gradients   #
       # stored in the grads dictionary defined above.                         #
       #########################################################################
-      self.params['W2'] += 
-      self.params['b2'] +=
-      self.params['W1'] +=
-      self.params['b1'] +=
+      self.params['W2'] += None
+      self.params['b2'] += None
+      self.params['W1'] += None
+      self.params['b1'] += None
       #########################################################################
       #                             END OF YOUR CODE                          #
       #########################################################################
@@ -228,9 +228,9 @@ class TwoLayerNet(object):
     ###########################################################################
     # TODO: Implement this function; it should be VERY simple!                #
     ###########################################################################
-    h = 
-    scores = 
-    y_pred = 
+    h = None
+    scores = None 
+    y_pred = None
     # pass
     ###########################################################################
     #                              END OF YOUR CODE                           #

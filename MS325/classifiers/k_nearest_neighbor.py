@@ -19,7 +19,8 @@ class KNearestNeighbor(object):
     - y: A numpy array of shape (N,) containing the training labels, where
          y[i] is the label for X[i].
     """
-    self.X_train = X
+    #!!!np.int8 may cause error
+    self.X_train = X.astype(np.float64)
     self.y_train = y
     
   def predict(self, X, k=1, num_loops=0):
@@ -45,7 +46,7 @@ class KNearestNeighbor(object):
       dists = self.compute_distances_two_loops(X)
     else:
       raise ValueError('Invalid value %d for num_loops' % num_loops)
-
+    
     return self.predict_labels(dists, k=k)
 
   def compute_distances_two_loops(self, X):
@@ -64,6 +65,7 @@ class KNearestNeighbor(object):
     """
     num_test = X.shape[0]
     num_train = self.X_train.shape[0]
+    X = X.astype(np.float64)
     dists = np.zeros((num_test, num_train))
     for i in xrange(num_test):
       for j in xrange(num_train):
@@ -73,7 +75,8 @@ class KNearestNeighbor(object):
         # training point, and store the result in dists[i, j]. You should   #
         # not use a loop over dimension.                                    #
         #####################################################################
-        dists[i,j] = 
+        tmp = X[i,:] - self.X_train[j,:]
+        dists[i,j] = np.dot(tmp, tmp.T)
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
@@ -88,14 +91,19 @@ class KNearestNeighbor(object):
     """
     num_test = X.shape[0]
     num_train = self.X_train.shape[0]
+    X = X.astype(np.float64)
     dists = np.zeros((num_test, num_train))
+    dim = X.shape[1]
     for i in xrange(num_test):
       #######################################################################
       # TODO:                                                               #
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
       #######################################################################
-      dists[i,:] = 
+      tmp = (self.X_train - X[i,:]).reshape([1, -1])
+      tmp = np.multiply(tmp, tmp)
+      tmp = tmp.reshape([-1, dim])
+      dists[i,:] = np.sum(tmp, axis=1)
       #######################################################################
       #                         END OF YOUR CODE                            #
       #######################################################################
@@ -110,6 +118,7 @@ class KNearestNeighbor(object):
     """
     num_test = X.shape[0]
     num_train = self.X_train.shape[0]
+    X = X.astype(np.float64)
     dists = np.zeros((num_test, num_train)) 
     #########################################################################
     # TODO:                                                                 #
@@ -124,7 +133,9 @@ class KNearestNeighbor(object):
     #       and two broadcast sums                                          #
     # Attention: square(x1-x2) = square(x1) + square(x2) - 2 * x1 * x2      #
     #########################################################################
-    dists = 
+    tmp = np.matrix(np.diag(np.dot(X, X.T)))
+    tmp_train = np.diag(np.dot(self.X_train, self.X_train.T))
+    dists = dists + tmp_train + tmp.T - 2*np.dot(X, self.X_train.T)
     #########################################################################
     #                         END OF YOUR CODE                              #
     #########################################################################
@@ -143,6 +154,8 @@ class KNearestNeighbor(object):
     - y: A numpy array of shape (num_test,) containing predicted labels for the
       test data, where y[i] is the predicted label for the test point X[i].  
     """
+    #!!!<class 'numpy.matrixlib.defmatrix.matrix'> may cause error
+    dists = np.array(dists)
     num_test = dists.shape[0]
     y_pred = np.zeros(num_test)
     for i in xrange(num_test):
@@ -156,16 +169,17 @@ class KNearestNeighbor(object):
       # neighbors. Store these labels in closest_y.                           #
       # Hint: Look up the function numpy.argsort.                             #
       ########################################################################
-      closest_y = 
+      inds = np.array(np.argsort(dists[i,:])[:k]).reshape([-1,]).tolist()
+      closest_y = self.y_train[inds]
       #########################################################################
       # TODO:                                                                 #
       # Now that you have found the labels of the k nearest neighbors, you    #
       # need to find the most common label in the list closest_y of labels.   #
       # Store this label in y_pred[i]. Break ties by choosing the smaller     #
       # label.                                                                #
-      # Hint: Look up the function numpy.bitcount.                            #
+      # Hint: Look up the function numpy.bincount.                            #
       #########################################################################
-      y_pred[i] = 
+      y_pred[i] = np.argmax(np.bincount(closest_y))
       #########################################################################
       #                           END OF YOUR CODE                            # 
       #########################################################################

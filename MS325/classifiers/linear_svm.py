@@ -29,24 +29,24 @@ def svm_loss_naive(W, X, y, reg):
   num_train = X.shape[0]
   loss = 0.0
   for i in xrange(num_train):
-    scores = 
-    correct_class_score = 
+    scores = None
+    correct_class_score = None
     for j in xrange(num_classes):
       if j == y[i]:
         continue
-      margin = 
+      margin = None
       if margin > 0:
-        loss =
-        dW[:,j] += 
-        dW[:,y[i]] += 
+        loss = None
+        dW[:,j] += None
+        dW[:,y[i]] += None
 
   # Right now the loss is a sum over all training examples, but we want it
   # to be an average instead so we divide by num_train.
   loss /= num_train
   dW /= num_train
   # Add regularization to the loss.
-  loss += 
-  dW += 
+  loss += None
+  dW += None
   #############################################################################
   # TODO:                                                                     #
   # Compute the gradient of the loss function and store it dW.                #
@@ -75,11 +75,11 @@ def svm_loss_vectorized(W, X, y, reg):
   # result in loss.                                                           #
   #############################################################################
   # Hint: scores => margin => loss
-  scores = 
-  correct_scores = 
-  margin = 
+  scores = None
+  correct_scores = None
+  margin = None
   margin[range(X.shape[0]),list(y)] = 0
-  loss = 
+  loss = None
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -94,10 +94,10 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
-  gra = 
+  gra = None
   gra[margin>0] = 1
-  gra[range(X.shape[0]),list(y)] = 
-  dW = 
+  gra[range(X.shape[0]),list(y)] = None
+  dW = None
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
