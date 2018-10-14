@@ -31,19 +31,22 @@ def softmax_loss_naive(W, X, y, reg):
   # regularization!                                                           #
   #############################################################################
   for i in range(X.shape[0]):
-    scores =  None
-    shift_scores = None             # simplify your calculations
-    loss += None
+    scores =  X[i,:].dot(W) #(1, C)
+    shift_scores = scores - np.max(scores)             # simplify your calculations
+    tmp = np.exp(shift_scores[y[i]]) / np.sum(np.exp(shift_scores))
+    loss += -np.log(tmp)
     for j in range(W.shape[1]):
-        y_pred = None 
+        # (1, C)
+        y_pred = np.exp(shift_scores) / np.sum(np.exp(shift_scores)).reshape([1,-1])
+        #print(y_pred[0,j].shape, X[i,:].T.shape, dW[:,j].shape)
         if j != y[i]:
-            dW[:,j] += None 
+            dW[:,j] += y_pred[0,j]*X[i,:].T
         else:
-            dW[:,j] += None 
+            dW[:,j] += (y_pred[0,j]-1)*X[i,:].T
   loss /= X.shape[0]
   # do not forget regulazation:
-  loss += None
-  dW = None
+  loss += reg*0.5*np.sum(W * W)
+  dW = dW + reg*W
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
@@ -69,17 +72,17 @@ def softmax_loss_vectorized(W, X, y, reg):
   #############################################################################
   num_classes = W.shape[1]
   num_train = X.shape[0]
-  scores = None
-  shift_scores = None
-  softmax_output = None
-  loss = None
+  scores = X.dot(W) # (N, C)
+  shift_scores = scores - np.max(scores, axis=1).reshape([-1,1])
+  softmax_output = np.exp(shift_scores) / np.sum(np.exp(shift_scores), axis=1).reshape([-1,1])
+  loss = np.sum(-np.log(softmax_output[np.arange(num_train), y]))
   loss /= num_train 
   loss +=  0.5* reg * np.sum(W * W)
-  
+
   dS = softmax_output.copy()
-  dS[range(num_train), list(y)] += None
-  dW = None
-  dW = dW/num_train + reg* W 
+  dS[range(num_train), list(y)] += -1
+  dW = X.T.dot(dS)
+  dW = dW + reg* W 
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
