@@ -46,7 +46,7 @@ def softmax_loss_naive(W, X, y, reg):
   loss /= X.shape[0]
   # do not forget regulazation:
   loss += reg*0.5*np.sum(W * W)
-  dW = dW + reg*W
+  dW = dW / X.shape[0] + reg*W
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
@@ -81,7 +81,7 @@ def softmax_loss_vectorized(W, X, y, reg):
 
   dS = softmax_output.copy()
   dS[range(num_train), list(y)] += -1
-  dW = X.T.dot(dS)
+  dW = X.T.dot(dS) / num_train
   dW = dW + reg* W 
   #############################################################################
   #                          END OF YOUR CODE                                 #
