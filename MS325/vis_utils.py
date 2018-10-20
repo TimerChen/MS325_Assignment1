@@ -12,11 +12,11 @@ def visualize_grid(Xs, ubound=255.0, padding=1):
   - ubound: Output grid will have values scaled to the range [0, ubound]
   - padding: The number of blank pixels between elements of the grid
   """
-  (N, H, W, C) = Xs.shape
+  (N, H, W) = Xs.shape
   grid_size = int(ceil(sqrt(N)))
   grid_height = H * grid_size + padding * (grid_size - 1)
   grid_width = W * grid_size + padding * (grid_size - 1)
-  grid = np.zeros((grid_height, grid_width, C))
+  grid = np.zeros((grid_height, grid_width))
   next_idx = 0
   y0, y1 = 0, H
   for y in xrange(grid_size):
